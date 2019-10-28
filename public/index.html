@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Animal Prolog</title>
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <main class="container">
+        <!-- Program -->
+        <textarea class="form-control mt-4 example-textinput example-program" id="program">
+        likes(sam, salad).
+        likes(dean, pie).
+        likes(sam, apples).
+        likes(dean, whiskey).
+        </textarea>
+
+        <!-- Name -->
+        <input class="example-textinput example-goal form-control mt-4" type="text" id="name" onKeyup="changeName();"
+            value="" placeholder="Enter a name" />
+
+        <!-- Button -->
+        <input class="example-button btn btn-success mt-4" type="button" value="See all likes" id="button"
+            onClick="clickButton();" />
+
+        <!-- Answers -->
+        <div class="example-result mt-4" id="result"></div>
+
+
+        <form class="text-center" style="color: #00838f;">
+
+            <div class="md-form mt-0">
+                <input type="text" id="animalName" name="animalName" class="form-control mb-4"
+                    placeholder="Animal name">
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="md-form mt-0">
+                        <label for="">It is: </label>
+                    </div>
+                </div>
+                <div class="col">
+
+                    <div class="md-form mb-0">
+                        <input type="text" id="itIs" name="costo_total" class="form-control mb-4" placeholder=""
+                            required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="md-form mt-0">
+                        <label for="">It has: </label>
+                    </div>
+                </div>
+                <div class="col">
+
+                    <div class="md-form mb-0">
+                        <input type="text" id="itHas" name="costo_total" class="form-control mb-4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="md-form mt-0">
+                        <label for="">It eats: </label>
+                    </div>
+                </div>
+                <div class="col">
+
+                    <div class="md-form mb-0">
+                        <input type="text" id="itEats" name="costo_total" class="form-control mb-4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="md-form mt-0">
+                        <label for="">It does: </label>
+                    </div>
+                </div>
+                <div class="col">
+
+                    <div class="md-form mb-0">
+                        <input type="text" id="itDoes" name="costo_total" class="form-control mb-4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="md-form-row">
+                <div class="col">
+                    <button id="okButton" class="btn btn-sm btn-success my-0" type="button">Ok</button>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+
+
+    <script type="text/javascript" src="js/tau-prolog.js"></script>
+    <script type="text/javascript">
+
+        const session = pl.create(1000);
+        const program = `
+                animal(robbie).
+                animal(suzie).
+                animal(leopard).
+
+                itHas(robbie, darkSpots).
+                itHas(leopard, darkSpots).
+                itHas(leopard, sharpTeeth).
+                itHas(leopard, hair).
+                itHas(leopard, claws).
+                itHas(leopard, frontEyes).
+                itHas(suzie, feathers).
+
+                itEats(robbie, meat).
+                itEats(leopard, meat).
+
+                itDoes(suzie, flys).
+
+                color(leopard, tawny).
+                color(_, white).
+                color(_, blackWhite).
+
+
+                itGives(leopard,milk).
+
+                birth(suzie, eggs).
+
+
+                isMammal(X):- animal(X); itHas(X, hair); itGives(X, milk).
+
+                isBird(X):- animal(X), itHas(X,feathers); itDoes(X, flys), birth(X, eggs).
+
+                isCarnivore(X):- animal(X), itEats(X, meat); itHas(X, sharpTeeth), itHas(X, claws ), itHas(X, frontEyes).
+
+                isUngulate(X):- animal(X), itHas(X, hoof); itDoes(X, ruminates).
+
+                isLeopard(X):- isMammal(X), isCarnivore(X), itHas(X, darkSpots).
+
+                isTiger(X):- isMammal(X), isCarnivore(X), color(X, tawny), itHas(X, blackStripes).
+
+                isJirafa(X):- isUngulate(X), itHas(X, darkSpots), itHas(X, longLegs), itHas(_, longNeck).
+
+                isZebra(X):- isUngulate(X), itHas(X, blackStripes).
+
+                isOstrich(X):- isBird(X), not(itDoes(X, flys)), itHas(X, longNeck), itHas(X, longLegs), color(X, white).
+
+                isPenguin(X):- isBird(X), not(itDoes(X, flys)), itDoes(X, swim), color(X, blackWhite).
+
+                isAlbatroz(X):- isBird(X), itDoes(X, flys).
+            `
+        session.consult(program)
+
+        console.log(session.query('itDoes(robbie, flys).'))
+
+        /** LIKES */
+        try {
+            document.getElementById('okButton').addEventListener('click', handleOk)
+            console.lo
+        } catch (error) {
+
+        }
+
+        function handleOk(event) {
+            makeQuery()
+        }
+
+        function makeQuery() {
+            let itIs = '', itHas = '', itEats = '', itDoes = '', animalName = '';
+
+            try {
+                itIs = document.getElementById('itIs').value.toLowerCase()
+            } catch (error) {
+                console.log(error.message)
+            }
+
+            try {
+                animalName = document.getElementById('animalName').value.toLowerCase()
+            } catch (error) {
+                console.log(error.message)
+            }
+
+            try {
+                itHas = document.getElementById('itHas').value.toLowerCase()
+            } catch (error) { }
+
+            try {
+                itEats = document.getElementById('itEats').value.toLowerCase()
+            } catch (error) { }
+
+            try {
+                itDoes = document.getElementById('itDoes').value.toLowerCase()
+            } catch (error) { }
+
+            if (itIs === 'animal') {
+                console.log("TCL: animalName", animalName)
+                animalName ? console.log(`${animalName} it's animal`) : console.log(`It's animal`)
+                let values = getBooleanValues([{ itHas }, { itEats }, { itDoes }], animalName)
+                console.log("TCL: values", values)
+            }
+            else {
+                console.log(`It's not animal`)
+            }
+
+        }
+
+        function getBooleanValues(items, name) {
+            console.log(items)
+            console.log(Object.keys(items)[0])
+            console.log(Object.keys(items)[1])
+            console.log(Object.keys(items)[2])
+
+            return items.map(item => {
+                console.log(`${Object.keys(item)[0]}(${name}, ${Object.values(item)[0]}).`)
+                let result = session.query(`${Object.keys(item)[0]}(${name}, ${Object.values(item)[0]}).`)
+
+                return { ...item, value: result }
+            })
+        }
+
+        // Callback function
+        function show(name) {
+            // Get output container
+            var result = document.getElementById("result");
+            // Return callback function
+            return function (answer) {
+                console.log("TCL: show -> answer", answer)
+                // Valid answer
+                if (pl.type.is_substitution(answer)) {
+                    // Get the value of the food
+                    var food = answer.lookup("Y");
+                    // Get the person
+                    var person = name != "X" ? name : answer.lookup("X");
+                    // Show answer
+                    result.innerHTML += `<div>${person} likes ${food}</div>`;
+                }
+            };
+        }
+
+        // Show the likes of a person
+        function likes(name) {
+            // Create session
+            var session = pl.create(1000);
+            // Get program
+            var program = document.getElementById("program").value;
+            // Clear output
+            document.getElementById("result").innerHTML = "";
+            // Consult program
+            let consult = session.consult(program);
+            console.log("TCL: likes -> consult", consult)
+            // Query goal
+            let result = session.query(`likes(${name}, Y).`);
+            console.log("TCL: likes -> result", result)
+            // Find answers
+            session.answers(show(name), 1000);
+        }
+
+        /** EVENTS */
+
+        // onClick #button
+        function clickButton() {
+            // Get person
+            var name = document.getElementById("name").value.toLowerCase();
+            name = name ? name : "X";
+            // Get likes
+            likes(name);
+        }
+
+        // onChange #name
+        function changeName() {
+            var name = document.getElementById("name").value;
+            document.getElementById("button").value = name ? `What does ${name} like?` : "See all likes";
+        }
+        changeName();
+
+    </script>
+
+</body>
+
+</html>
